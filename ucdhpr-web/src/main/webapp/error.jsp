@@ -1,0 +1,1 @@
+<%@ page isErrorPage="true" import="java.io.*,java.util.*" contentType="text/javascript"%><%=request.getAttribute("javax.servlet.error.message")%>
