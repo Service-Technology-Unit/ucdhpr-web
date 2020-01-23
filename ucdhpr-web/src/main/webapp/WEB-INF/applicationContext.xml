@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:encryption="http://www.jasypt.org/schema/encryption"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+		http://www.jasypt.org/schema/encryption http://www.jasypt.org/schema/encryption/jasypt-spring3-encryption-1.xsd">
+
+	<encryption:encryptor-config id="encryptorConf" password-env-name="ENCRYPTION_PASSWORD" algorithm-env-name="ENCRYPTION_ALGORITHM" />
+	<encryption:string-encryptor id="stringEncryptor" config-bean="encryptorConf" /> 
+
+	<encryption:encryptable-property-placeholder
+		encryptor="stringEncryptor"
+		location="classpath*:spring.properties,classpath*:local-server.properties" />
+
+	<util:map id="buildInfo" map-class="java.util.HashMap">
+		<entry key="artifactId" value="${build.artifactId}" />
+		<entry key="version"	value="${build.version}" />
+		<entry key="timestamp"  value="${build.timestamp}" />
+	</util:map>
+
+	<bean id="masterDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"		 value="java:comp/env/jdbc/masterdata"/>
+		<property name="lookupOnStartup" value="false"/>
+		<property name="cache"		     value="true"/>
+		<property name="proxyInterface"  value="javax.sql.DataSource"/>
+	</bean>
+
+	<bean id="serviceNowServer" class="java.lang.String">
+		<constructor-arg value="${servicenow.server}" />
+	</bean>
+
+	<bean id="serviceNowUser" class="java.lang.String">
+		<constructor-arg value="${servicenow.username}" />
+	</bean>
+
+	<bean id="serviceNowPassword" class="java.lang.String">
+		<constructor-arg value="${servicenow.password}" />
+	</bean>
+
+	<bean id="up2dateService" class="edu.ucdavis.ucdh.stu.up2date.service.Up2DateService">
+		<constructor-arg value="${up2date.service.url}"></constructor-arg>
+		<constructor-arg value="${up2date.max.concurrent.actions}"></constructor-arg>
+	</bean>
+
+	<bean id="eventService" class="edu.ucdavis.ucdh.stu.snutil.util.EventService">
+		<constructor-arg value="${servicenow.server}" />
+		<constructor-arg value="${servicenow.username}" />
+		<constructor-arg value="${servicenow.password}" />
+	</bean>
+
+</beans>
