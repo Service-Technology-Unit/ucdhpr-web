@@ -7,6 +7,26 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 	<display-name>UCDH Person Repository Web</display-name>
 
+	<security-role>
+		<role-name>ucdpush</role-name>
+	</security-role>
+
+	<security-constraint> 
+ 		<web-resource-collection>
+ 			<web-resource-name>personUpdateServlet</web-resource-name>
+ 			<url-pattern>/person.txt</url-pattern>
+ 		</web-resource-collection>
+
+		<auth-constraint>
+			<role-name>ucdpush</role-name>
+		</auth-constraint>
+ 	</security-constraint> 
+
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>UCDH Person Repository</realm-name>
+	</login-config>
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/applicationContext*.xml</param-value>
